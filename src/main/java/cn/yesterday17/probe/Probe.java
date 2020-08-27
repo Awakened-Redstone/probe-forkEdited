@@ -44,7 +44,14 @@ import java.util.stream.Collectors;
 public class Probe {
     public static final String MOD_ID = "probe";
     static final String NAME = "Probe";
-    static final String VERSION = "@VERSION@";
+    static final String VERSION = ProbeVersion.VERSION;
+
+    public Probe() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onLoadComplete);
+        MinecraftForge.EVENT_BUS.register(this);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ProbeConfig.CLIENT_SPEC);
+    }
 
     public static final Logger logger = LogManager.getLogger();
 
@@ -111,7 +118,7 @@ public class Probe {
                 .sorted(Comparator.comparing(e -> e.getRegistryName().toString()))
                 .collect(Collectors.toList());
 
-        // fluids
+        // Fluids
         rcFile.fluids = ForgeRegistries.FLUIDS.getValues().stream()
                 .sorted(Comparator.comparing(f -> f.getRegistryName().toString()))
                 .collect(Collectors.toList());
