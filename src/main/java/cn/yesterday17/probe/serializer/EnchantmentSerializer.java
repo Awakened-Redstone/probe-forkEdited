@@ -17,8 +17,8 @@ public class EnchantmentSerializer implements JsonSerializer<Enchantment> {
 
         try {
             enchantment.addProperty("name", I18n.format(src.getName()));
-            enchantment.addProperty("unlocalizedName", src.getName());
-            enchantment.add("resourceLocation", context.serialize(src.getRegistryName().getPath()));
+            enchantment.addProperty("translationKey", src.getName());
+            enchantment.add("resourceLocation", context.serialize(src.getRegistryName()));
             enchantment.addProperty("type", src.type != null ? src.type.toString() : null);
             enchantment.addProperty("rarity", src.getRarity().toString());
             enchantment.addProperty("minLevel", src.getMinLevel());

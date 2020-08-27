@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityType;
 
 import java.lang.reflect.Type;
@@ -15,10 +16,9 @@ public class EntitySerializer implements JsonSerializer<EntityType> {
         JsonObject entity = new JsonObject();
 
         try {
-            entity.addProperty("id", src.getTranslationKey());
-            entity.addProperty("name", src.getName().getString());
+            entity.addProperty("id", src.getRegistryName().toString());
+            entity.addProperty("name", I18n.format(src.getTranslationKey()));
             entity.add("resourceLocation", context.serialize(src.getRegistryName()));
-            // Dump information about Spawn eggs here if necessary.
         } catch (Exception e) {
             Probe.logger.error("Failed serializing Entities!");
             Probe.logger.error(e, e);

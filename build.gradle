@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'maven-publish'
 
-version = '0.2.0'
+version = '0.2.1'
 group = 'cn.yesterday17'
 archivesBaseName = 'probe'
 
@@ -21,18 +21,8 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: 'snapshot', version: '20200820-1.16.1'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory project.file('run')
@@ -114,12 +104,7 @@ repositories {
     maven {
         url = 'https://dist.creeper.host/Sponge/maven'
     }
-    flatDir {
-        dirs 'libs'
-    }
 }
-
-//def zenCodeDeps = [':CodeFormatter', ':CodeFormatterShared', ':JavaIntegration', ':JavaAnnotations', ':JavaBytecodeCompiler', ':JavaShared', ':Validator', ':Parser', ':CodeModel', ':Shared']
 
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
@@ -132,11 +117,7 @@ dependencies {
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     // at runtime, use the full JEI jar
-    compile fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-
-    //zenCodeDeps.collect { compile project(it) }
-
-    compile name: 'ZenScript-1.0.0'
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -172,3 +153,20 @@ publishing {
         }
     }
 }
+
+task generateSources {
+    def outputDir = file("$buildDir/../src/main/java/cn/yesterday17/probe")
+    outputs.dir outputDir
+    doFirst {
+        outputDir.exists() || outputDir.mkdirs()
+        def srcFile = new File(outputDir, "ProbeVersion.java")
+        srcFile.write(
+                """package cn.yesterday17.probe;
+  public class ProbeVersion {
+    static final String VERSION = "$project.version";
+}
+""")
+    }
+}
+compileJava.dependsOn generateSources
+compileJava.source generateSources.outputs.files, sourceSets.main.java

@@ -1,6 +1,5 @@
 package cn.yesterday17.probe.serializer;
 
-//import cn.yesterday17.probe.Probe;
 import cn.yesterday17.probe.Probe;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
