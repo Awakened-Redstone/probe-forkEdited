@@ -114,6 +114,8 @@ gradle-app.setting
 # Common working directory
 run/
 
+# Probe for 1.16 before rewrite
+probe_old/
+
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-/src_old/
