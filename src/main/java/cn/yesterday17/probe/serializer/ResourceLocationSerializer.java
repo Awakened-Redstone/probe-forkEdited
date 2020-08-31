@@ -15,7 +15,7 @@ public class ResourceLocationSerializer implements JsonSerializer<ResourceLocati
         JsonObject resource = new JsonObject();
 
         try {
-            resource.addProperty("domain", src.getNamespace());
+            resource.addProperty("namespace", src.getNamespace());
             resource.addProperty("path", src.getPath());
         } catch (Exception e) {
             Probe.logger.error("Failed serializing ResourceLocation!");
